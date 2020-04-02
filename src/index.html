@@ -19,6 +19,20 @@
   flex: row wrap;
   margin: auto;
 }
+.pushbutton-container {
+  #display: flex;
+  #flex-direction: column;
+  width: 60px;
+}
+.pushbutton-label {
+  font-size: 10px;
+  text-align: center;
+  color: gray;
+  position: relative;
+  line-height: 1;
+  top: -5px;
+  right: -15px;
+}
   </style>
   <body>
     <h2>Info2 board Demo</h2>
@@ -34,14 +48,38 @@
         <wokwi-led id="led7" label="PB7" color="red"></wokwi-led>
       </div>
       <div class="module buttons">
-        <wokwi-pushbutton id="button0" label="PC0" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button1" label="PC1" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button2" label="PC2" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button3" label="PC3" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button4" label="PC4" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button5" label="PC5" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button6" label="PC6" color="red"></wokwi-pushbutton>
-        <wokwi-pushbutton id="button7" label="PC7" color="red"></wokwi-pushbutton>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button0" label="PC0" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC0</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button1" label="PC1" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC1</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button2" label="PC2" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC2</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button3" label="PC3" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC3</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button4" label="PC4" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC4</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button5" label="PC5" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC5</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button6" label="PC6" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC6</span>
+        </div>
+        <div class="pushbutton-container">
+          <wokwi-pushbutton id="button7" label="PC7" color="red"></wokwi-pushbutton>
+          <span class="pushbutton-label">PC7</span>
+        </div>
       </div>
     </div>
     <div class="app-container">
