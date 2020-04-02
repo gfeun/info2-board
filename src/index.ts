@@ -9,20 +9,14 @@ import { EditorHistoryUtil } from './utils/editor-history.util';
 
 let editor: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 const BLINK_CODE = `
-// Green LED connected to LED_BUILTIN,
-// Red LED connected to pin 12. Enjoy!
-
 void setup() {
-  Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
+  DDRB = 0xFF;
+  DDRC = 0x00;
 }
 
 void loop() {
-  Serial.println("Blink");
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(500);
+  PORTB = PINC;
+  delay(200);
 }`.trim();
 
 // Load Editor
