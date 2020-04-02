@@ -9,14 +9,41 @@ import { EditorHistoryUtil } from './utils/editor-history.util';
 
 let editor: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 const BLINK_CODE = `
-void setup() {
+void setup(){
   DDRB = 0xFF;
   DDRC = 0x00;
+
+  // initialize 8 bits Timer0
+  // disable global interrupts
+  cli();
+
+  TCCR0A = 0;
+  TCCR0B = 0;
+
+  // set compare match register to desired timer count:
+  OCR0A = 254;
+
+  // turn on CTC mode:
+  TCCR0A = 1 << WGM01;
+  // Set CS10 and CS12 bits for 1024 prescaler:
+  TCCR0B |= 0x05;
+  // enable timer compare interrupt:
+  TIMSK0 |= (1 << OCIE0A);
+
+  // enable global interrupts:
+  sei();
 }
 
-void loop() {
-  PORTB = PINC;
-  delay(200);
+void loop(){}
+
+ISR(TIMER0_COMPA_vect)
+{
+  static int nb = 0;
+  nb++;
+  if (nb > 60) {
+    nb = 0;
+    PORTB^=0xFF;
+  }
 }`.trim();
 
 // Load Editor
