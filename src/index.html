@@ -6,60 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>AVR8js LED Demo</title>
     <link href="//fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
-  </head>
-  <style type="text/css" media="screen">
-* {
-  box-sizing: border-box;
-}
-
-@media (max-width: 1200px) {
-  .board {
-    display: inline-grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-    "arduino"
-    "keypad"
-    "module1"
-    "module2"
-    "module3"
-    "module4"
-    "module5"
-    "module6"
-    "module7"
-    "code";
-  justify-content: start;
-  place-items: center center;
-  }
-}
-
-@media (min-width: 1200px) {
-  .board {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: repeat(1fr, 5) 2fr;
-    grid-template-areas:
-      "module1 arduino keypad"
-    "module2 arduino keypad"
-    "module3 . module4"
-    ". module5 ."
-    "module6 . module7"
-    "code code .";
-  justify-content: start;
-  grid-gap: 1px;
-  place-items: center center;
-  width: 1200px;
-  }
-}
-
-.module {
-  border: solid black;
-  margin: auto;
-}
-
-.pushbutton-container {
-  width: auto;
-}
-
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
 .pushbutton-label {
   font-size: 10px;
   text-align: center;
@@ -69,98 +17,89 @@
   top: -5px;
   right: -15px;
 }
-  </style>
+    </style>
+  </head>
   <body>
-    <h2>Info2 board Demo</h2>
-    <div class="board">
-      <wokwi-arduino-uno style="grid-area: arduino; transform: rotate(90deg)"
-                         ></wokwi-arduino-uno>
-
-      <wokwi-membrane-keypad style="grid-area: keypad"
-                             @button-press=${action('button-press')}
-                             @button-release=${action('button-release')}
-                             ></wokwi-membrane-keypad>
-
-      <wokwi-potentiometer style="grid-area: module1"
-                           min="0"
-                           max="200"
-                           ></wokwi-potentiometer>
-      <wokwi-7segment style="grid-area: module2" color="red" values="[0,1,1,0,0,1,1,1]"></wokwi-7segment>
-
-      <wokwi-lcd1602 style="grid-area: module5"
-                     .characters="${encode(text('value', helloWorld))}"
-                     .cursor=${boolean('cursor', false)}
-                     .blink=${boolean('blink', false)}
-                     cursorX=${number('cursorX', 0, { min: 0, max: 15 })}
-                     cursorY=${number('cursorY', 0, { min: 0, max: 1 })}
-                     .backlight=${boolean('backlight', true)}
-                     ></wokwi-lcd1602>
-
-      <div style="grid-area: module6; display: flex">
-        <wokwi-led id="led7" label="PB7" color="red"></wokwi-led>
-        <wokwi-led id="led6" label="PB6" color="red"></wokwi-led>
-        <wokwi-led id="led5" label="PB5" color="red"></wokwi-led>
-        <wokwi-led id="led4" label="PB4" color="red"></wokwi-led>
-        <wokwi-led id="led3" label="PB3" color="red"></wokwi-led>
-        <wokwi-led id="led2" label="PB2" color="red"></wokwi-led>
-        <wokwi-led id="led1" label="PB1" color="red"></wokwi-led>
-        <wokwi-led id="led0" label="PB0" color="red"></wokwi-led>
-      </div>
-      <div style="grid-area: module7; display: flex; border: 2px solid black;">
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button7" label="PC7" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC7</span>
+    <section class="section">
+      <div class="container is-fullhd">
+        <div class="columns is-multiline is-variable is-1 is-centered is-vcentered">
+          <div class="column is-one-third has-text-centered">
+            <div style="display: flex; flex-direction: column">
+              <wokwi-potentiometer
+                                   min="0"
+                                   max="200"
+                                   ></wokwi-potentiometer>
+              <wokwi-7segment color="red" values="[0,1,1,0,0,1,1,1]"></wokwi-7segment>
+            </div>
+          </div>
+          <wokwi-arduino-uno class="column is-one-third has-text-centered"></wokwi-arduino-uno>
+          <wokwi-membrane-keypad class="column is-one-third has-text-centered" style="transform: scale(0.8)" @button-press=${action('button-press')}
+                                 @button-release=${action('button-release')}
+                                 ></wokwi-membrane-keypad>
+          <div class="column is-one-third has-text-centered">
+            <wokwi-buzzer></wokwi-buzzer>
+          </div>
+          <wokwi-lcd1602 class="column is-one-third has-text-centered"
+                         .characters="${encode(text('value', helloWorld))}"
+                         .cursor=${boolean('cursor', false)}
+                         .blink=${boolean('blink', false)}
+                         cursorX=${number('cursorX', 0, { min: 0, max: 15 })}
+                         cursorY=${number('cursorY', 0, { min: 0, max: 1 })}
+                         .backlight=${boolean('backlight', true)}
+                         >
+          </wokwi-lcd1602>
+            <div class="column is-one-third"></div>
+            <div class="column is-one-third has-text-centered">
+              <wokwi-led id="led7" label="PB7" color="red"></wokwi-led>
+              <wokwi-led id="led6" label="PB6" color="red"></wokwi-led>
+              <wokwi-led id="led5" label="PB5" color="red"></wokwi-led>
+              <wokwi-led id="led4" label="PB4" color="red"></wokwi-led>
+              <wokwi-led id="led3" label="PB3" color="red"></wokwi-led>
+              <wokwi-led id="led2" label="PB2" color="red"></wokwi-led>
+              <wokwi-led id="led1" label="PB1" color="red"></wokwi-led>
+              <wokwi-led id="led0" label="PB0" color="red"></wokwi-led>
+            </div>
+            <div class="column is-one-third has-text-centered">
+              <patched-wokwi-pushbutton id="button7" label="PC7" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button6" label="PC6" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button5" label="PC5" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button4" label="PC4" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button3" label="PC3" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button2" label="PC2" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button1" label="PC1" color="red"></patched-wokwi-pushbutton>
+              <patched-wokwi-pushbutton id="button0" label="PC0" color="red"></patched-wokwi-pushbutton>
+            </div>
         </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button6" label="PC6" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC6</span>
-        </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button5" label="PC5" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC5</span>
-        </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button4" label="PC4" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC4</span>
-        </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button3" label="PC3" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC3</span>
-        </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button2" label="PC2" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC2</span>
-        </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button1" label="PC1" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC1</span>
-        </div>
-        <div class="pushbutton-container">
-          <wokwi-pushbutton id="button0" label="PC0" color="red"></wokwi-pushbutton>
-          <span class="pushbutton-label">PC0</span>
+        <div class="column is-full app-container container">
+          <div class="toolbar">
+            <button id="run-button">Run</button>
+            <button id="stop-button" disabled>Stop</button>
+            <button id="revert-button">Back to example code</button>
+            <div class="spacer"></div>
+            <div id="status-label"></div>
+          </div>
+          <div class="code-editor"></div>
+          <div class="compiler-output">
+            <pre id="compiler-output-text"></pre>
+            <pre id="serial-output-text"></pre>
+          </div>
         </div>
       </div>
-      <div class="app-container" style="grid-area: code">
-        <div class="toolbar">
-          <button id="run-button">Run</button>
-          <button id="stop-button" disabled>Stop</button>
-          <button id="revert-button">Back to example code</button>
-          <div class="spacer"></div>
-          <div id="status-label"></div>
-        </div>
-        <div class="code-editor"></div>
-        <div class="compiler-output">
-          <pre id="compiler-output-text"></pre>
-          <pre id="serial-output-text"></pre>
-        </div>
-      </div>
-    </div>
+    </section>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.18.0/min/vs/loader.js"></script>
+    <script src="./patched-pushbutton.ts"></script>
+    <script src="./buzzer-element.ts"></script>
     <script src="./index.ts"></script>
-    <footer>
-      Credits: <a href="https://github.com/wokwi/avr8js" target="_blank" rel="noopener noreferrer">AVR Typescript Simulator</a> - <a href="https://github.com/wokwi/wokwi-elements" target="_blank" rel="noopener noreferrer">Electronic HTML Components</a>
-      </br>
-      <a href="https://github.com/gfeun/info2-board" target="_blank" rel="noopener noreferrer">Board Source Code</a>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+        Credits: <a href="https://github.com/wokwi/avr8js" target="_blank" rel="noopener noreferrer">AVR Typescript Simulator</a> - <a href="https://github.com/wokwi/wokwi-elements" target="_blank" rel="noopener noreferrer">Electronic HTML Components</a>
+        <br/>
+        <a href="https://github.com/gfeun/info2-board" target="_blank" rel="noopener noreferrer">Board Source Code</a>
+        </p>
+      </div>
     </footer>
   </body>
 </html>

@@ -1,14 +1,25 @@
+import 'bulma'
 import '@wokwi/elements';
 import { buildHex } from './compile';
 import { AVRRunner } from './execute';
 import { formatTime } from './format-time';
 import './index.css';
 import { CPUPerformance } from './cpu-performance';
-import { LEDElement, PushButtonElement } from '@wokwi/elements';
+import { LEDElement } from '@wokwi/elements';
+import { PatchedPushbuttonElement } from './patched-pushbutton'
 import { EditorHistoryUtil } from './utils/editor-history.util';
 
 let editor: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-const BLINK_CODE = `
+const BLINK_CODE  = `
+void setup() {
+
+}
+
+void loop() {
+
+}
+`.trim();
+const INTERRUPT_CODE = `
 void setup(){
   DDRB = 0xFF;
   DDRC = 0x00;
@@ -69,9 +80,9 @@ for(let i=0; i<ledModule.length; i++) {
   ledModule[i] = document.querySelector<LEDElement>("wokwi-led[id=led"+i+"]");
 }
 
-const buttonModule :PushButtonElement = new Array<PushButtonElement>(8);
+const buttonModule :PatchedPushbuttonElement = new Array<PatchedPushbuttonElement>(8);
 for(let i=0; i<buttonModule.length; i++) {
-  buttonModule[i] = document.querySelector<PushButtonElement>("wokwi-pushbutton[id=button"+i+"]");
+  buttonModule[i] = document.querySelector<PatchedPushbuttonElement>("patched-wokwi-pushbutton[id=button"+i+"]");
   buttonModule[i].addEventListener("button-press", buttonPress, false)
   buttonModule[i].addEventListener("button-release", buttonRelease, false)
 }
