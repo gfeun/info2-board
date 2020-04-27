@@ -6,8 +6,10 @@ import { formatTime } from './format-time';
 import './index.css';
 import { CPUPerformance } from './cpu-performance';
 import { LEDElement } from '@wokwi/elements';
-import { PatchedPushbuttonElement } from './patched-pushbutton'
+import { PatchedPushbuttonElement } from './patched-pushbutton';
+import { BuzzerElement} from './buzzer-element.ts';
 import { EditorHistoryUtil } from './utils/editor-history.util';
+import {portDConfig} from 'avr8js';
 
 let editor: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 const BLINK_CODE  = `
@@ -65,7 +67,7 @@ window.require.config({
 });
 window.require(['vs/editor/editor.main'], () => {
   editor = monaco.editor.create(document.querySelector('.code-editor'), {
-    value: EditorHistoryUtil.getValue() || BLINK_CODE,
+    value: EditorHistoryUtil.getValue() || INTERRUPT_CODE,
     language: 'cpp',
     minimap: { enabled: false }
   });
@@ -73,6 +75,8 @@ window.require(['vs/editor/editor.main'], () => {
 
 // Set up toolbar
 let runner: AVRRunner;
+
+const buzzer = document.querySelector<BuzzerElement>("wokwi-buzzer");
 
 // Set up board modules
 const ledModule = new Array<LEDElement>(8);
@@ -116,14 +120,21 @@ function executeProgram(hex: string) {
 
   // Hook to PORTB register
   runner.portB.addListener((value) => {
+    runner.speaker.feed(value & (1 << 0));
+    //buzzer.hasSignal = ((value & 0x01) == 1) ? true: false;
+
     for(let i=0; i<ledModule.length; i++) {
       const bit = 1 << i;
       ledModule[i].value = value & bit ? true : false;
     }
   });
-  runner.usart.onByteTransmit = (value) => {
-    serialOutputText.textContent += String.fromCharCode(value);
-  };
+
+  runner.cpu.data[portDConfig.PIN] = 0xff;
+
+  //runner.usart.onByteTransmit = (value) => {
+  //  serialOutputText.textContent += String.fromCharCode(value);
+  //};
+
   const cpuPerf = new CPUPerformance(runner.cpu, MHZ);
   runner.execute((cpu) => {
     const time = formatTime(cpu.cycles / MHZ);

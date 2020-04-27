@@ -3,6 +3,8 @@ import {
   AVRTimer,
   CPU,
   timer0Config,
+  timer1Config,
+  timer2Config,
   AVRIOPort,
   AVRUSART,
   portBConfig,
@@ -12,6 +14,7 @@ import {
 } from 'avr8js';
 import { loadHex } from './intelhex';
 import { MicroTaskScheduler } from './task-scheduler';
+import { Speaker } from "./speaker";
 
 // ATmega328p params
 const FLASH = 0x8000;
@@ -19,7 +22,9 @@ const FLASH = 0x8000;
 export class AVRRunner {
   readonly program = new Uint16Array(FLASH);
   readonly cpu: CPU;
-  readonly timer: AVRTimer;
+  readonly timer0: AVRTimer;
+  readonly timer1: AVRTimer;
+  readonly timer2: AVRTimer;
   readonly portB: AVRIOPort;
   readonly portC: AVRIOPort;
   readonly portD: AVRIOPort;
@@ -27,16 +32,20 @@ export class AVRRunner {
   readonly speed = 16e6; // 16 MHZ
   readonly workUnitCycles = 500000;
   readonly taskScheduler = new MicroTaskScheduler();
+  readonly speaker: Speaker;
 
   constructor(hex: string) {
     loadHex(hex, new Uint8Array(this.program.buffer));
     this.cpu = new CPU(this.program);
-    this.timer = new AVRTimer(this.cpu, timer0Config);
+    this.timer0 = new AVRTimer(this.cpu, timer0Config);
+    this.timer1 = new AVRTimer(this.cpu, timer1Config);
+    this.timer2 = new AVRTimer(this.cpu, timer2Config);
     this.portB = new AVRIOPort(this.cpu, portBConfig);
     this.portC = new AVRIOPort(this.cpu, portCConfig);
     this.portD = new AVRIOPort(this.cpu, portDConfig);
     this.usart = new AVRUSART(this.cpu, usart0Config, this.speed);
     this.taskScheduler.start();
+    this.speaker = new Speaker(this.cpu, this.speed);
   }
 
   // CPU main loop
@@ -44,8 +53,10 @@ export class AVRRunner {
     const cyclesToRun = this.cpu.cycles + this.workUnitCycles;
     while (this.cpu.cycles < cyclesToRun) {
       avrInstruction(this.cpu);
-      this.timer.tick();
-      this.usart.tick();
+      this.timer0.tick();
+      this.timer1.tick();
+      this.timer2.tick();
+      //this.usart.tick();
     }
 
     callback(this.cpu);
